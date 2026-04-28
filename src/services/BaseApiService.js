@@ -7,7 +7,7 @@ import appConfig from '../config/env';
 class BaseApiService {
   constructor() {
     this.client = axios.create({
-      baseURL: "https://eira-ye69.onrender.com/api",
+      baseURL: "https://eira-8d4w.onrender.com/api",
       timeout: appConfig.timeout,
       headers: {
         'Content-Type': 'application/json',
