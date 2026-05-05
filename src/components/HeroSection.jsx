@@ -5,7 +5,7 @@ const FRAME_COUNT = 240;
 
 const FRAMES = [];
 for (let i = 1; i <= FRAME_COUNT; i++) {
-  FRAMES.push(`./frames/frame${i}.avif`);
+  FRAMES.push(`https://raw.githubusercontent.com/vedantvermajsx/eira/refs/heads/master/public/frames/frame${i}.avif`);
 }
 
 export default function HeroSection({ onFramesReady }) {
