@@ -20,13 +20,10 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-
-// --- API Routes ---
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/bookings', require('./routes/bookings'));
-
-
+app.use('/api/auth', require('./routes/auth'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));

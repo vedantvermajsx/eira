@@ -3,9 +3,10 @@ const router = express.Router();
 const Booking = require('../models/Booking');
 const Piece = require('../models/Piece');
 const { sendEmail } = require('../services/emailService');
+const verifyAdmin = require('../middleware/auth');
 
-// GET /api/bookings
-router.get('/', async (req, res) => {
+
+router.get('/', verifyAdmin, async (req, res) => {
   try {
     const bookings = await Booking.find().sort({ createdAt: -1 });
     res.json(bookings);
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/bookings
+
 router.post('/', async (req, res) => {
   try {
     const { userName, userEmail, userPhone, pieceId, pieceName, url } = req.body;
@@ -75,8 +76,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PATCH /api/bookings/:id/status
-router.patch('/:id/status', async (req, res) => {
+
+router.patch('/:id/status', verifyAdmin, async (req, res) => {
   try {
     const { status } = req.body;
     const booking = await Booking.findByIdAndUpdate(req.params.id, { 

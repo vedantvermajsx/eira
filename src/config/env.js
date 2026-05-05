@@ -18,7 +18,7 @@ const config = {
     env: 'production',
     apiBaseUrl: '/api',
     apiKey: import.meta.env.VITE_API_KEY,
-    mongoUri: import.meta.env.VITE_MONGODB_URI, // Used server-side only; stored here for reference
+    mongoUri: import.meta.env.VITE_MONGODB_URI, 
     timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 15000,
     debug: false,
   },

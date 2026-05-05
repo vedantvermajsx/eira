@@ -1,9 +1,8 @@
 import { Navigate } from 'react-router-dom';
+import AuthService from '../services/AuthService';
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('eira_auth') === 'true';
-
-  if (!isAuthenticated) {
+  if (!AuthService.isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 

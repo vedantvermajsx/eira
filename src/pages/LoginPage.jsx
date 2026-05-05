@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthService from '../services/AuthService';
 
 const S = {
   label: { fontFamily: "'Jost',sans-serif", fontSize: '9px', letterSpacing: '2.5px', textTransform: 'uppercase', color: 'rgba(212,175,55,0.4)', fontWeight: 300, display: 'block', marginBottom: '8px' },
@@ -11,16 +12,27 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Simple mock authentication
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('eira_auth', 'true');
-      navigate('/admin');
-    } else {
-      setError('Invalid username or password');
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await AuthService.login(username, password);
+      if (response.success) {
+        localStorage.setItem('eira_auth', 'true');
+        localStorage.setItem('eira_token', response.token);
+        navigate('/admin');
+      } else {
+        setError(response.error || 'Login failed');
+      }
+    } catch (err) {
+      setError(err.message || 'Invalid username or password');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,8 +66,14 @@ export default function LoginPage() {
 
             {error && <p style={{ color: 'rgba(239, 68, 68, 0.8)', fontSize: '11px', fontFamily: "'Jost', sans-serif", textAlign: 'center' }}>{error}</p>}
 
-            <button type="submit" style={S.button} onMouseEnter={e => e.target.style.background = '#E5C158'} onMouseLeave={e => e.target.style.background = '#D4AF37'}>
-              Sign In
+            <button 
+              type="submit" 
+              style={{...S.button, opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer'}} 
+              disabled={loading}
+              onMouseEnter={e => !loading && (e.target.style.background = '#E5C158')} 
+              onMouseLeave={e => !loading && (e.target.style.background = '#D4AF37')}
+            >
+              {loading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
         </div>

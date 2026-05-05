@@ -51,7 +51,6 @@ export default function Navbar() {
         transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
       }}>
 
-        {/* Left nav links — desktop only */}
         {!isMobile && (
           <ul style={{ display: 'flex', gap: '48px', listStyle: 'none' }}>
             <li>
@@ -69,10 +68,8 @@ export default function Navbar() {
           </ul>
         )}
 
-        {/* Mobile — left spacer so logo stays centred */}
         {isMobile && <div style={{ width: '32px' }} />}
 
-        {/* Center logo */}
         <Link to="/" style={{
           fontFamily: "'Cinzel', serif",
           fontSize: isMobile ? '14px' : '18px',
@@ -82,7 +79,6 @@ export default function Navbar() {
           textShadow: '0 0 40px rgba(212,175,55,0.2)', textDecoration: 'none',
         }}>EIRA</Link>
 
-        {/* Right nav links — desktop only */}
         {!isMobile && (
           <ul style={{ display: 'flex', gap: '48px', listStyle: 'none' }}>
             {['Heritage', 'Contact'].map(link => (
@@ -96,7 +92,6 @@ export default function Navbar() {
           </ul>
         )}
 
-        {/* Hamburger button — mobile only */}
         {isMobile && (
           <button
             onClick={() => setMenuOpen(o => !o)}
@@ -107,7 +102,6 @@ export default function Navbar() {
               gap: '5px', zIndex: 1100,
             }}
           >
-            {/* 3-bar → X morph */}
             {[0, 1, 2].map(i => (
               <span key={i} style={{
                 display: 'block', width: '22px', height: '1px',
@@ -127,7 +121,6 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Mobile full-screen overlay menu */}
       {isMobile && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 999,
@@ -184,7 +177,6 @@ export default function Navbar() {
               )
             ))}
 
-          {/* Decorative divider */}
           <div style={{ width: '40px', height: '1px', background: 'rgba(212,175,55,0.25)' }} />
           <p style={{
             fontFamily: "'Jost', sans-serif", fontSize: '9px', letterSpacing: '4px',

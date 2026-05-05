@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { upload } = require('../config/cloudinary');
+const verifyAdmin = require('../middleware/auth');
 
-// POST /api/upload
-router.post('/', upload.single('image'), (req, res) => {
+
+router.post('/', verifyAdmin, upload.single('image'), (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });

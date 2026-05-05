@@ -1,9 +1,7 @@
 import axios from 'axios';
 import appConfig from '../config/env';
 
-/**
- * Base API Service - Handles axios instance, interceptors, and HTTP methods
- */
+
 class BaseApiService {
   constructor() {
     this.client = axios.create({
@@ -12,8 +10,6 @@ class BaseApiService {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        // Inject API key only in production
-        ...(appConfig.apiKey && { 'x-api-key': appConfig.apiKey }),
       },
     });
 
@@ -21,10 +17,17 @@ class BaseApiService {
     this._attachResponseInterceptor();
   }
 
-  /** Attach request interceptor — log in dev, inject auth in prod */
+
   _attachRequestInterceptor() {
     this.client.interceptors.request.use(
       (config) => {
+        const token = localStorage.getItem('eira_token');
+        if (token) {
+          config.headers['x-api-key'] = token;
+        } else if (appConfig.apiKey) {
+          config.headers['x-api-key'] = appConfig.apiKey;
+        }
+
         if (appConfig.debug) {
           console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, config);
         }
@@ -37,7 +40,7 @@ class BaseApiService {
     );
   }
 
-  /** Attach response interceptor — normalize errors */
+
   _attachResponseInterceptor() {
     this.client.interceptors.response.use(
       (response) => {
@@ -49,6 +52,15 @@ class BaseApiService {
       (error) => {
         const status = error.response?.status;
         const message = error.response?.data?.message || error.message || 'Unknown error';
+
+        if (status === 401) {
+          console.warn('[API Auth] Unauthorized access detected. Clearing session.');
+          localStorage.removeItem('eira_auth');
+          localStorage.removeItem('eira_token');
+          if (!window.location.pathname.includes('/login')) {
+            window.location.href = '/login';
+          }
+        }
 
         if (appConfig.debug) {
           console.error(`[API Error] ${status}: ${message}`, error);

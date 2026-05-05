@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Piece = require('../models/Piece');
+const verifyAdmin = require('../middleware/auth');
 
-// GET /api/inventory
+
 router.get('/', async (req, res) => {
   try {
     const pieces = await Piece.find().sort({ createdAt: -1 });
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/inventory/:id
+
 router.get('/:id', async (req, res) => {
   try {
     const piece = await Piece.findById(req.params.id);
@@ -23,8 +24,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/inventory
-router.post('/', async (req, res) => {
+
+router.post('/', verifyAdmin, async (req, res) => {
   try {
     const piece = new Piece(req.body);
     await piece.save();
@@ -34,8 +35,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT /api/inventory/:id
-router.put('/:id', async (req, res) => {
+
+router.put('/:id', verifyAdmin, async (req, res) => {
   try {
     const piece = await Piece.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(piece);
@@ -44,8 +45,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/inventory/:id
-router.delete('/:id', async (req, res) => {
+
+router.delete('/:id', verifyAdmin, async (req, res) => {
   try {
     await Piece.findByIdAndDelete(req.params.id);
     res.json({ success: true });
