@@ -7,7 +7,7 @@ const initEmailJS = () => {
   });
 };
 
-const sendEmail = async (serviceId, templateId, params) => {
+const sendEmail = async (params, serviceId = process.env.EMAILJS_SERVICE_INQUIRY, templateId = process.env.EMAILJS_TEMPLATE_INQUIRY) => {
   if (!serviceId || !templateId) {
     console.warn('[MailSender] EmailJS configuration incomplete (missing serviceId or templateId).');
     return { success: false, error: 'Configuration missing' };

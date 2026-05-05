@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
         console.error('[MailSender] Could not fetch piece details for price:', err);
       }
 
-      const emailResult = await sendEmail(process.env.EMAILJS_SERVICE_INQUIRY, process.env.EMAILJS_TEMPLATE_INQUIRY, {
+      const emailResult = await sendEmail({
         customer_name: userName,
         item_name: pieceName,
         item_price: piecePrice,
@@ -53,7 +53,6 @@ router.post('/', async (req, res) => {
 
       if (!emailResult || !emailResult.success) {
         console.error('[MailSender] Email delivery failed:', emailResult?.error);
-        // Return the booking data with the email error
         return res.status(201).json({ 
           id: booking._id,
           userName,
